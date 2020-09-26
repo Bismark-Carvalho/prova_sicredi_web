@@ -2,8 +2,6 @@ package provasicredi.core;
 
 import static provasicredi.core.DriverManager.getDriver;
 
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -13,26 +11,20 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Methods {
 
-	public void click(String xpath) {
+	public void clicar(String xpath) {
+		elementoExiste(xpath);
 		getDriver().findElement(By.id(xpath)).click();
 	}
 
-	public void selectByVisibleText(String xpath, String value) {
+	public void selecionarViaTexto(String xpath, String value) {
+		elementoExiste(xpath);
 		Select valueSelection = new Select(getDriver().findElement(By.xpath(xpath)));
 		valueSelection.selectByVisibleText(value);
 
 	}
-	
-	public void selectByValue(String xpath, String value) {
-		getDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-		Select valueSelection = new Select(getDriver().findElement(By.xpath(xpath)));
-		valueSelection.selectByValue(value);
-
-	}
-	
-
 
 	public void clicarViaJS(String xpath) {
+		elementoExiste(xpath);
 		JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
 		WebElement element = getDriver().findElement(By.xpath(xpath));
 		js.executeScript("arguments[0].click()", element);
@@ -40,14 +32,23 @@ public class Methods {
 	}
 
 	public void escrever(String xpath, String text) {
+		elementoExiste(xpath);
 		getDriver().findElement(By.xpath(xpath)).sendKeys(text);
 
 	}
 
-	public void elementExist(String xpath) {
-		WebDriverWait wait = new WebDriverWait(getDriver(), 3);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));		
+	public void elementoExiste(String xpath) {
+		WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 	}
 
+	public void clicarViaCssSelector(String cssSelector) {
+		getDriver().findElement(By.cssSelector(cssSelector)).click();
+
+	}
+
+	public String recuperarTexto(String xpath) {
+		return getDriver().findElement(By.xpath(xpath)).getText();
+	}
 
 }
